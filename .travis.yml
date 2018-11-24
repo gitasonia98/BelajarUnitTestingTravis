@@ -7,24 +7,22 @@ php:
 
   branches:
     only:
-      -master @->staging server
-      -develop @->DevServer
+      - master #-> QA/ staging server
+      - develop #->DevServer
 
      #sebelum melakukan atau eksekusi script
      #install kebutuhan os. exit :mod-php dll.
-     before_install:
-      -curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-      -chomod +x ./kubectl
-      -sudo mv ./kubectl/usr/local/kubectl
-      -kubectl
-     
-      #pre execution
-      #testing dll
+
       before_script:
+        - cp .env.travis .env
+        - composer install --no-interaction #untuk interaksi package
+        - php artisan key:generate #untuk generate token
 
-        #main excecution
-        script :
+#script -> main excution
+       
+      script :
+      #ketika kondisi main execution finish
+      after_success:
 
-      env:
-        global:
-          -
+
+     
